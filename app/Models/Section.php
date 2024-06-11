@@ -20,4 +20,8 @@ class Section extends Model
     public function subjects(){
         return $this->hasMany(Subject::class);
     }
+
+    public function subjectloads(){
+        return $this->hasMany(SubjectLoad::class);
+    }
 }
