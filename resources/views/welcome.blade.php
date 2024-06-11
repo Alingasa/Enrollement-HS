@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -169,4 +169,100 @@
             </div>
         </div>
     </body>
+</html> --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>High School Enrollment</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        body{
+          background-color: skyblue;
+        }
+        .boxform{
+          background-color: rgb(206, 235, 246) ;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+          border-radius: 5%;
+        }
+
+        </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+          <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <div class="boxform p-5 ">
+                <form id="studenttypeform">
+                    <div class="align-items-center">
+                        <h3 style="margin-bottom: 15px;">Please select</h3>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="studentType" id="studentType1" checked>
+                            <label class="form-check-label" for="studentType1">
+                              New Student
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="studentType" id="studentType2">
+                            <label class="form-check-label" for="studentType2">
+                              Old Student
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="studentType" id="studentType3">
+                            <label class="form-check-label" for="studentType3">
+                              Transferee
+                            </label>
+                          </div>
+                          <a type="button" class="btn btn-primary" href="/studentform" style="margin-top: 10px;">Proceed</a>
+
+                    </div>
+                </form>
+                <form hidden>
+                    <div class="mb-3">
+                        <label for="school_id" class="form-label">Enter your school ID.</label>
+                        <input type="string" class="form-control" id="school_id">
+                        <a type="button" class="btn btn-primary" href="/studentform" style="margin-top: 10px;">Enter</a>
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script>
+    document.getElementById('studenttypeform').addEventListener('submit', function(event){
+        event.preventDefault();
+
+        if(document.getElementById('studentType1').checked){
+        const studentType1 = document.getElementById('studentType1').value
+        console.log(studentType1);
+        }
+
+        if(document.getElementById('studentType2').checked){
+        const studentType2 = document.getElementById('studentType2').value
+        console.log(studentType2);
+        }
+
+        if(document.getElementById('studentType3').checked){
+        const studentType3 = document.getElementById('studentType3').value
+        console.log(studentType3);
+        }
+
+
+
+
+
+
+    })
+    </script>
+</body>
 </html>
