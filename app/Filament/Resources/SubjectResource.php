@@ -27,13 +27,13 @@ class SubjectResource extends Resource
                 Forms\Components\select::make('section_id')
                     ->required()
                     ->relationship(name: 'section', titleAttribute: 'name'),
+                Forms\Components\select::make('strand_id')
+                    ->required()
+                    ->relationship(name: 'strand', titleAttribute: 'name'),
                 Forms\Components\TextInput::make('subject_code')
                     ->required(),
                 Forms\Components\TextInput::make('subject_title')
                     ->required(),
-                Forms\Components\select::make('strand_id')
-                    ->required()
-                    ->relationship(name: 'strand', titleAttribute: 'name'),
                 Forms\Components\TextInput::make('subject_type')
                     ->required(),
             ]);
