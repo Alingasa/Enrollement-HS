@@ -34,8 +34,11 @@ class SubjectResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('subject_title')
                     ->required(),
-                Forms\Components\TextInput::make('subject_type')
-                    ->required(),
+                Forms\Components\Select::make('subject_type')
+                    ->options([
+                        'Laboratory' => 'Laboratory',
+                        'Lecture' => 'Lecture',
+                    ]),
             ]);
     }
 
