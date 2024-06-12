@@ -5,6 +5,7 @@ namespace App\Models;
 use App\CivilStatus;
 use App\GenderType;
 use App\GradeType;
+use App\Status;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,7 @@ class Student extends Model
             'grade_level' => GradeType::class,
             'civil_status' => CivilStatus::class,
             'gender'       => GenderType::class,
+            'status'       => Status::class,
         ];
     }
     public function getAgeAttribute()
