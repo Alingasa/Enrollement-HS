@@ -28,7 +28,6 @@ class SubjectResource extends Resource
                     ->required()
                     ->relationship(name: 'section', titleAttribute: 'name'),
                 Forms\Components\select::make('strand_id')
-                    ->required()
                     ->relationship(name: 'strand', titleAttribute: 'name'),
                 Forms\Components\TextInput::make('subject_code')
                     ->required(),
@@ -54,6 +53,7 @@ class SubjectResource extends Resource
                 Tables\Columns\TextColumn::make('strand.name')
                     ->sortable()
                     ->badge()
+                    ->default('No Strand')
                     ->color('warning'),
                 Tables\Columns\TextColumn::make('subject_code')
                     ->searchable(),
@@ -103,8 +103,8 @@ class SubjectResource extends Resource
         return [
             'index' => Pages\ListSubjects::route('/'),
             'create' => Pages\CreateSubject::route('/create'),
-            'view' => Pages\ViewSubject::route('/{record}'),
-            'edit' => Pages\EditSubject::route('/{record}/edit'),
+            // 'view' => Pages\ViewSubject::route('/{record}'),
+            // 'edit' => Pages\EditSubject::route('/{record}/edit'),
         ];
     }
 

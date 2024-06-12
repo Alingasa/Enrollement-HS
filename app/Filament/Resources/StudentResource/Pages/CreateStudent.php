@@ -14,10 +14,9 @@ class CreateStudent extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $currentYear = Carbon::now()->year;
-        $lastTwoDigits = substr($currentYear, -2);
-
-        $data['school_id'] = $lastTwoDigits.'-'.str_pad(Student::count() + 1, 4, '0', STR_PAD_LEFT);
+        // $currentYear = Carbon::now()->year;
+        // $lastTwoDigits = substr($currentYear, -2);
+        // $data['school_id'] = $lastTwoDigits.'-'.str_pad(Student::count() + 1, 4, '0', STR_PAD_LEFT);
         return $data;
     }
 }

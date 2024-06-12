@@ -3,8 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EnrollmentResource\Pages;
-use App\Filament\Resources\EnrollmentResource\RelationManagers;
+use App\Filament\Resources\EnrollmentResource\RelationManagers\SectionRelationManager;
+use App\Filament\Resources\EnrollmentResource\RelationManagers\StudentRelationManager;
 use App\Models\Enrollment;
+use App\Models\Student;
+use App\Status;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,14 +26,42 @@ class EnrollmentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('student_id')
-                    ->relationship(name: 'student', titleAttribute: 'school_id')
-                    ->required(),
+                Forms\Components\Section::make()
+                ->columns(2)
+                ->schema([
+                    Forms\Components\Select::make('student_id')
+                    ->relationship(
+                        name: 'student',
+                        ignoreRecord: true,
+                        modifyQueryUsing: function ($query) {
+                            $query->where('status', Status::PENDING);
+                        }
+                    )
+                    ->afterStateUpdated(fn ($state) => Student::find($state))
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
+                    ->label('Student ID')
+                    ->required()
+                    ->searchable()
+                    ->preload()
+                    ->live()
+                    ->hiddenOn('edit'),
 
-                Forms\Components\Select::make('section_id')
-                    ->relationship(name: 'section', titleAttribute: 'name')
-                    ->required(),
+                    //  ->visible(fn ($get, $operation) => ($operation == 'edit') && in_array($get('status'), [
+                    //     Status::ENROLLED->value,
+                    //  ])),
+                    Forms\Components\Select::make('section_id')
+                        ->searchable()
+                        ->preload()
+                        ->relationship(name: 'section', titleAttribute: 'name')
+                        ->required(),
+                ]),
+                Forms\Components\Section::make()
+                    ->schema([
+                     Forms\Components\TextInput::make('First Name')
+                     ->dehydrateStateUsing(fn (string $state): string => dd($state))
 
+                    ])
+                    ->visible(fn ($get) => !empty($get('student_id'))),
             ]);
     }
 
@@ -38,6 +69,15 @@ class EnrollmentResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('student.profile_image')
+                ->defaultImageUrl(url('default_images/me.jpg'))
+                ->alignCenter()
+                ->circular(),
+                Tables\Columns\TextColumn::make('student.school_id')
+                ->label('School ID')
+                ->default('Set ID')
+                ->badge()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('student.full_name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('section.name')
@@ -62,7 +102,7 @@ class EnrollmentResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -78,6 +118,8 @@ class EnrollmentResource extends Resource
     {
         return [
             //
+            SectionRelationManager::class,
+
         ];
     }
 
@@ -86,7 +128,7 @@ class EnrollmentResource extends Resource
         return [
             'index' => Pages\ListEnrollments::route('/'),
             'create' => Pages\CreateEnrollment::route('/create'),
-            'view' => Pages\ViewEnrollment::route('/{record}'),
+            // 'view' => Pages\ViewEnrollment::route('/{record}'),
             'edit' => Pages\EditEnrollment::route('/{record}/edit'),
         ];
     }

@@ -8,6 +8,7 @@ use App\Filament\Resources\StudentResource\RelationManagers;
 use App\GenderType;
 use App\GradeType;
 use App\Models\Student;
+use App\Status;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -39,19 +40,25 @@ class StudentResource extends Resource
                 Forms\Components\Section::make()
                 ->columns(2)
                 ->schema([
-                    Forms\Components\Select::make('strand_id')
-                    ->relationship(name: 'strand', titleAttribute: 'name' )
-                    ->searchable()
-                    ->visible(fn ($get, $operation) => ($operation == 'edit' || $operation == 'create') && in_array($get('grade_level'), [
-                        GradeType::GRADE11->value,
-                        GradeType::GRADE12->value,
+                    Forms\Components\TextInput::make('school_id')
+                    ->label('Shool ID')
+                    ->visible(fn ($get, $operation) => ($operation == 'edit') && in_array($get('status'), [
+                        Status::ENROLLED->value,
                     ]))
-                    ->required()
-                    ->preload(),
+                    ->unique(table: 'students', column: 'school_id', ignoreRecord: true),
                 Forms\Components\select::make('grade_level')
                 ->live()
                 ->default(GradeType::GRADE7->value)
                 ->options(GradeType::class),
+                Forms\Components\Select::make('strand_id')
+                ->relationship(name: 'strand', titleAttribute: 'name' )
+                ->searchable()
+                ->visible(fn ($get, $operation) => ($operation == 'edit' || $operation == 'create') && in_array($get('grade_level'), [
+                    GradeType::GRADE11->value,
+                    GradeType::GRADE12->value,
+                ]))
+                ->required()
+                ->preload(),
                 Forms\Components\TextInput::make('first_name')
                     ->required(),
                 Forms\Components\TextInput::make('middle_name'),
@@ -59,20 +66,22 @@ class StudentResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->unique(table: 'students', column: 'email', ignoreRecord: true)
-                    ->email()
-                    ->required(),
+                    ->email(),
                 Forms\Components\DatePicker::make('birthdate')
                     ->required(),
                 Forms\Components\select::make('gender')
+                    ->required()
                     ->options(GenderType::class),
                 Forms\Components\select::make('civil_status')
+                    ->required()
                     ->options(CivilStatus::class),
                 Forms\Components\TextInput::make('contact_number')
                 ->required(),
                 Forms\Components\TextInput::make('religion')
                 ->required(),
                 Forms\Components\TextInput::make('facebook_url')
-                ->required(),
+                // ->required()
+                ->placeholder('Optional'),
                 Forms\Components\TextInput::make('purok')
                 ->required(),
                 Forms\Components\TextInput::make('sitio_street')
@@ -87,9 +96,10 @@ class StudentResource extends Resource
                     ->numeric()
                     ->required(),
                 Forms\Components\TextInput::make('guardian_name')
+                ->label('Guardian Name/Parent Name')
                 ->required(),
                 Forms\Components\TextInput::make('LRN')
-                ->required(),
+                ->placeholder('Optional'),
                 ])
             ]);
     }
@@ -98,6 +108,9 @@ class StudentResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->searchable(),
                 Tables\Columns\ImageColumn::make('profile_image')
                 ->defaultImageUrl(url('default_images/me.jpg'))
                 ->alignCenter()
@@ -111,6 +124,8 @@ class StudentResource extends Resource
                     })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('school_id')
+                    ->badge()
+                    ->default('Set ID')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('full_name')
                     ->searchable(['middle_name', 'first_name', 'last_name'])

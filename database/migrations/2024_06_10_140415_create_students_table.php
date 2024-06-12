@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+            $table->integer('status')->default(1);
             $table->foreignId('strand_id')->nullable()->constrained()->cascadeOnUpdate();
             $table->string('grade_level')->nullable();
-            $table->string('school_id')->unique();
+            $table->string('school_id')->unique()->nullable();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->date('birthdate');
             $table->string('gender');                               // select from datalist
             $table->integer('civil_status')->nullable();                        // enum
