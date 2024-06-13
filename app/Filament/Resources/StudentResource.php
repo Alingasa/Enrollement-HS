@@ -84,9 +84,9 @@ class StudentResource extends Resource
                 ->required(),
                 Forms\Components\TextInput::make('religion')
                 ->required(),
-                Forms\Components\TextInput::make('facebook_url')
+                // Forms\Components\TextInput::make('facebook_url')
                 // ->required()
-                ->placeholder('Optional'),
+                // ->placeholder('Optional'),
                 Forms\Components\TextInput::make('purok')
                 ->required(),
                 Forms\Components\TextInput::make('sitio_street')
@@ -103,8 +103,8 @@ class StudentResource extends Resource
                 Forms\Components\TextInput::make('guardian_name')
                 ->label('Guardian Name/Parent Name')
                 ->required(),
-                Forms\Components\TextInput::make('LRN')
-                ->placeholder('Optional'),
+                // Forms\Components\TextInput::make('LRN')
+                // ->placeholder('Optional'),
                 ])
             ]);
     }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+            $table->string('_token')->nullable();
             $table->integer('status')->default(1);
             $table->foreignId('strand_id')->nullable()->constrained()->cascadeOnUpdate();
             $table->string('grade_level')->nullable();
@@ -42,6 +43,7 @@ return new class extends Migration
             $table->string('LRN')->nullable();
 
             $table->string('profile_image')->nullable();
+
 
             $table->softDeletes();
             $table->timestamps();
