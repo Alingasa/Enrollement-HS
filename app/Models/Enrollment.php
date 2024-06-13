@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Status;
+use App\StudentTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Enrollment extends Model
 {
@@ -12,6 +14,13 @@ class Enrollment extends Model
 
     protected $guarded = [];
 
+    protected function casts()
+    {
+        return [
+            'status'       => Status::class,
+            'student_type' => StudentTypeEnum::class
+        ];
+    }
     public function section(){
         return $this->belongsTo(Section::class);
     }

@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\RelationManagers\SubjectsRelationManager;
-use App\Filament\Resources\SubjectResource\Pages;
-use App\Filament\Resources\SubjectResource\RelationManagers;
-use App\Models\Subject;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Subject;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\SubjectResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\SubjectResource\RelationManagers;
+use App\Filament\Resources\CategoryResource\RelationManagers\SubjectsRelationManager;
 
 class SubjectResource extends Resource
 {
@@ -30,6 +31,7 @@ class SubjectResource extends Resource
                 Forms\Components\select::make('strand_id')
                     ->relationship(name: 'strand', titleAttribute: 'name'),
                 Forms\Components\TextInput::make('subject_code')
+                    ->unique(table: 'subjects', column: 'subject_code', ignoreRecord:true )
                     ->required(),
                 Forms\Components\TextInput::make('subject_title')
                     ->required(),
@@ -76,6 +78,9 @@ class SubjectResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('section_id')
+                ->label('By Section')
+                ->relationship('section', 'name'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

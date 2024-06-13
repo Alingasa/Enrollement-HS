@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\EnrollmentResource\Pages;
 
-use App\Filament\Resources\EnrollmentResource;
-use App\Models\Student;
 use App\Status;
 use Filament\Actions;
+use App\Models\Student;
+use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\EnrollmentResource;
+use Illuminate\Support\Arr;
 
 class CreateEnrollment extends CreateRecord
 {
@@ -21,6 +24,21 @@ class CreateEnrollment extends CreateRecord
         $record->status = Status::ENROLLED;
         $record->save();
         return $data;
+    }
+    protected function handleRecordCreation(array $data): Model
+    {
+        $record = new ($this->getModel())(Arr::except($data, 'student'));
+
+        if (
+            static::getResource()::isScopedToTenant() &&
+            ($tenant = Filament::getTenant())
+        ) {
+            return $this->associateRecordWithTenant($record, $tenant);
+        }
+
+        $record->save();
+
+        return $record;
     }
 
 }

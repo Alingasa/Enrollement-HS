@@ -2,20 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\CivilStatus;
-use App\Filament\Resources\StudentResource\Pages;
-use App\Filament\Resources\StudentResource\RelationManagers;
-use App\GenderType;
-use App\GradeType;
-use App\Models\Student;
 use App\Status;
+use App\GradeType;
+use App\GenderType;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\CivilStatus;
 use Filament\Tables;
+use App\Models\Student;
+use App\StudentTypeEnum;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\StudentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\StudentResource\RelationManagers;
 
 class StudentResource extends Resource
 {
@@ -37,7 +40,7 @@ class StudentResource extends Resource
                     ->imageEditor()
                     ->image(),
                 ]),
-                Forms\Components\Section::make()
+                Forms\Components\Section::make('Student Details')
                 ->columns(2)
                 ->schema([
                     Forms\Components\TextInput::make('school_id')
@@ -126,6 +129,10 @@ class StudentResource extends Resource
                 Tables\Columns\TextColumn::make('school_id')
                     ->badge()
                     ->default('Set ID')
+                    ->color(fn ($state): string => match($state){
+                        'Set ID' => 'danger',
+                         $state => 'primary'
+                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('full_name')
                     ->searchable(['middle_name', 'first_name', 'last_name'])
@@ -186,7 +193,15 @@ class StudentResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-            ])
+                SelectFilter::make('Status')
+                ->options(Status::class),
+                SelectFilter::make('grade_level')
+                ->options(GradeType::class),
+                SelectFilter::make('strand_id')
+                ->label('By Strands')
+                ->relationship('strand', 'name'),
+
+            ], layout: FiltersLayout::AboveContentCollapsible)
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
