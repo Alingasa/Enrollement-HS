@@ -15,7 +15,31 @@ class Student extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'school_id',
+        '_token',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'email',
+        'contact_number',
+        'gender',
+        'birthdate',
+        'civil_status',
+        'religion',
+        'purok',
+        'sitio_street',
+        'barangay',
+        'municipality',
+        'province',
+        'zip_code',
+        'guardian_name',
+        'grade_level',
+        'strand_id',
+        'profile_image',
+        'status',
+    ];
+    // protected $guarded = [];
 
     // protected $with = ['user'];
 
