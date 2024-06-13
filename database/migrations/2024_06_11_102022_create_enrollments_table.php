@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
+            $table->integer('student_type')->nullable();
             $table->foreignId('student_id')->constrained()->cascadeOnUpdate();
             $table->foreignId('section_id')->constrained()->cascadeOnUpdate();
             $table->softDeletes();

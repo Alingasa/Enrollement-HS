@@ -2,19 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use App\Status;
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Student;
+use App\Models\Subject;
+use Filament\Forms\Form;
+use App\Models\Enrollment;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EnrollmentResource\Pages;
 use App\Filament\Resources\EnrollmentResource\RelationManagers\SectionRelationManager;
 use App\Filament\Resources\EnrollmentResource\RelationManagers\StudentRelationManager;
-use App\Models\Enrollment;
-use App\Models\Student;
-use App\Status;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\StudentTypeEnum;
 
 class EnrollmentResource extends Resource
 {
@@ -29,6 +34,7 @@ class EnrollmentResource extends Resource
                 Forms\Components\Section::make()
                 ->columns(2)
                 ->schema([
+
                     Forms\Components\Select::make('student_id')
                     ->relationship(
                         name: 'student',
@@ -37,9 +43,18 @@ class EnrollmentResource extends Resource
                             $query->where('status', Status::PENDING);
                         }
                     )
-                    ->afterStateUpdated(fn ($state) => Student::find($state))
+                    ->afterStateUpdated(function ($state, $set) {
+                      $student =  Student::find($state);
+                      if($student){
+                        $set('student.full_name', $student->full_name);
+                        $set('student.strand', $student->strand);
+                        $set('student.birthdate', $student->birthdate);
+                        $set('student.gender', $student->gender);
+                        $set('student.grade_level', $student->grade_level);
+                      }
+                    } )
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
-                    ->label('Student ID')
+                    ->label('Student Enrollee')
                     ->required()
                     ->searchable()
                     ->preload()
@@ -51,18 +66,37 @@ class EnrollmentResource extends Resource
                     //  ])),
                     Forms\Components\Select::make('section_id')
                         ->searchable()
+                        ->relationship(name: 'section')
+                        ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
+                        ->required()
                         ->preload()
-                        ->relationship(name: 'section', titleAttribute: 'name')
-                        ->required(),
+                        ->live(),
                 ]),
-                Forms\Components\Section::make()
+                Forms\Components\Section::make('Student')
+                    ->columns(2)
                     ->schema([
-                     Forms\Components\TextInput::make('First Name')
-                     ->dehydrateStateUsing(fn (string $state): string => dd($state))
+                    //  Forms\Components\TextInput::make('student.'),
+                    // Forms\Components\TextInput::make('student.status')
+                    // ->placeholder(Status::PENDING->value)
+                    // ->readonly(),
+                    Forms\Components\TextInput::make('student.full_name')
+                    ->readonly(),
+                     Forms\Components\TextInput::make('student.strand')
+                     ->placeholder('No Strand')
+                     ->readonly(),
+                     Forms\Components\TextInput::make('student.birthdate')
+                     ->readonly(),
+                     Forms\Components\TextInput::make('student.gender')
+                     ->readonly(),
+                     Forms\Components\TextInput::make('student.grade_level')
+                     ->readonly(),
+
+                    //  ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
 
                     ])
                     ->visible(fn ($get) => !empty($get('student_id'))),
-            ]);
+         ]);
+
     }
 
     public static function table(Table $table): Table
@@ -76,6 +110,11 @@ class EnrollmentResource extends Resource
                 Tables\Columns\TextColumn::make('student.school_id')
                 ->label('School ID')
                 ->default('Set ID')
+                ->color(fn ($state): string => match($state){
+                    'Set ID' => 'danger',
+                    $state => 'primary'
+                }
+                )
                 ->badge()
                 ->sortable(),
                 Tables\Columns\TextColumn::make('student.full_name')
@@ -100,6 +139,9 @@ class EnrollmentResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('section_id')
+                ->label('By Section')
+                ->relationship('section', 'name'),
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
