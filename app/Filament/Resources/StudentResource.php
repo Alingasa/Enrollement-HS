@@ -44,6 +44,7 @@ class StudentResource extends Resource
                 ->columns(2)
                 ->schema([
                     Forms\Components\TextInput::make('school_id')
+                    ->placeholder('Set ID')
                     ->label('Shool ID')
                     ->visible(fn ($get, $operation) => ($operation == 'edit') && in_array($get('status'), [
                         Status::ENROLLED->value,
@@ -51,7 +52,7 @@ class StudentResource extends Resource
                     ->unique(table: 'students', column: 'school_id', ignoreRecord: true),
                 Forms\Components\select::make('grade_level')
                 ->live()
-                ->default(GradeType::GRADE7->value)
+                ->required()
                 ->options(GradeType::class),
                 Forms\Components\Select::make('strand_id')
                 ->relationship(name: 'strand', titleAttribute: 'name' )
@@ -79,6 +80,7 @@ class StudentResource extends Resource
                     ->required()
                     ->options(CivilStatus::class),
                 Forms\Components\TextInput::make('contact_number')
+                ->numeric()
                 ->required(),
                 Forms\Components\TextInput::make('religion')
                 ->required(),
@@ -202,6 +204,7 @@ class StudentResource extends Resource
                 ->relationship('strand', 'name'),
 
             ], layout: FiltersLayout::AboveContentCollapsible)
+            ->defaultSort('full_name', 'desc')
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),

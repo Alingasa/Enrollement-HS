@@ -10,12 +10,14 @@ enum Status: string implements HasLabel, HasIcon, HasColor
 {
     case PENDING = '1';
     case ENROLLED = '2';
+    // case SETID = 'Set ID';
 
     public function getLabel(): ?string
     {
         return match ($this) {
             self::PENDING => 'Pending',
             self::ENROLLED => 'Enrolled',
+            // self::SETID => 'Set ID',
         };
     }
 
@@ -24,6 +26,7 @@ enum Status: string implements HasLabel, HasIcon, HasColor
         return match ($this) {
             self::PENDING    => 'warning',
             self::ENROLLED    => 'success',
+            // self::SETID    => 'success',
         };
     }
 
@@ -32,6 +35,7 @@ enum Status: string implements HasLabel, HasIcon, HasColor
         return match ($this) {
             self::ENROLLED    => 'heroicon-o-check-circle',
             self::PENDING      => 'heroicon-o-arrow-path',
+            // self::SETID    => 'heroicon-o-check-circle',
         };
     }
 }
