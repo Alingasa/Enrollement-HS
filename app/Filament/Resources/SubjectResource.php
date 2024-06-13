@@ -25,7 +25,10 @@ class SubjectResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\select::make('section_id')
+                Forms\Components\Section::make('Subjects')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\select::make('section_id')
                     ->required()
                     ->relationship(name: 'section', titleAttribute: 'name'),
                 Forms\Components\select::make('strand_id')
@@ -40,6 +43,8 @@ class SubjectResource extends Resource
                         'Laboratory' => 'Laboratory',
                         'Lecture' => 'Lecture',
                     ]),
+                ]),
+
             ]);
     }
 
