@@ -64,8 +64,6 @@ class StudentController extends Controller
             'guardian_name'=> 'required',
             'grade_level'=> 'required',
 
-            'profile_image' => 'required',
-
         ]);
 
 
