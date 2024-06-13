@@ -17,8 +17,7 @@
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
           border-radius: 5%;
         }
-
-        </style>
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -35,55 +34,6 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
-
-                @if(Session::has('error'))
-                    <div id="error-alert" class="alert alert-danger" role="alert">
-                        {{ Session::get('error') }}
-                    </div>
-                @elseif ($message = Session::get('success'))
-                    <div id="success-alert" class="alert alert-success">
-                        <p>{{ $message }}</p>
-                    </div>
-                @endif
-
-                    <div class="align-items-center">
-                        <h3 style="margin-bottom: 15px;">Please Select!</h3>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="studentType" id="studentType1" checked>
-                            <label class="form-check-label" for="studentType1">
-                              New Student
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="studentType" id="studentType2">
-                            <label class="form-check-label" for="studentType2">
-                              Old Student
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="studentType" id="studentType3">
-                            <label class="form-check-label" for="studentType3">
-                              Transferee
-                            </label>
-                          </div>
-                          <input type="submit" name="proceed" id="proceed" class="btn btn-primary" style="margin-top: 10px;" value="Proceed" >
-
-                    </div>
-                </form>
-                <form id="schoolidform" action="/updatestudent" method="post">
-                    @csrf
-                    <div class="mb-3">
-
-                        @if ($errors->any())
-                        <div id="error-alert" class="alert alert-danger">
-                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
                     @endif
 
                     @if(Session::has('error'))
@@ -95,6 +45,53 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
+
+                    <div class="align-items-center">
+                        <h3 style="margin-bottom: 15px;">Please Select!</h3>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="studentType" id="studentType1" checked>
+                            <label class="form-check-label" for="studentType1">
+                              New Student
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="studentType" id="studentType2">
+                            <label class="form-check-label" for="studentType2">
+                              Old Student
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="studentType" id="studentType3">
+                            <label class="form-check-label" for="studentType3">
+                              Transferee
+                            </label>
+                        </div>
+                        <input type="submit" name="proceed" id="proceed" class="btn btn-primary" style="margin-top: 10px;" value="Proceed" >
+                    </div>
+                </form>
+                <form id="schoolidform" action="/updatestudent" method="post">
+                    @csrf
+                    <div class="mb-3">
+                        @if ($errors->any())
+                        <div id="error-alert" class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+
+                        @if(Session::has('error'))
+                            <div id="error-alert" class="alert alert-danger" role="alert">
+                                {{ Session::get('error') }}
+                            </div>
+                        @elseif ($message = Session::get('success'))
+                            <div id="success-alert" class="alert alert-success">
+                                <p>{{ $message }}</p>
+                            </div>
+                        @endif
 
                         <div class="col-md-12">
                         <label for="school_id" class="form-label">Enter your school ID.</label>
@@ -125,7 +122,7 @@
                           </div>
 
                         <input  type="submit" id="enterid" class="btn btn-primary" style="margin-top: 10px;" value="Apply for enrollment">
-                        <input type="button" class="btn btn-danger" style="margin-top: 10px;" value="Cancel" >
+                        <a href="/" class="btn btn-danger" style="margin-top: 10px;" value="Cancel" >Cancel</a>
                       </div>
                 </form>
             </div>
@@ -133,50 +130,37 @@
     </div>
 </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             setTimeout(function() {
                 document.getElementById('error-alert').style.display = 'none';
                 document.getElementById('success-alert').style.display = 'none';
             }, 3000);
 
-
-            document.getElementById('enterid').addEventListener('click', function(){
-
-
+            document.getElementById('enterid').addEventListener('click', function(event){
                 const schoolid = document.getElementById("school_id").value;
-
-
                 if(schoolid === ''){
                     alert("Please input your school id.");
                     document.getElementById('school_id').focus();
+                    event.preventDefault(); // Prevent form submission
                 }
-
-
-
-                }
-            )
-
+            });
 
             document.getElementById('grade_level').addEventListener('change',function(){
                 const grade_level = document.getElementById('grade_level').value;
-
-                if(grade_level >=11){
+                if(grade_level >= 11){
                     document.getElementById('stranddiv').removeAttribute('hidden');
-                }else{
+                } else {
                     document.getElementById('stranddiv').setAttribute('hidden', 'true');
                 }
-            })
-
+            });
 
             document.getElementById('proceed').addEventListener('click',function(event){
                 event.preventDefault();
                 window.location.href = "/students";
-            })
+            });
 
             const studentTypeForm = document.getElementById('studenttypeform');
             const hiddenForm = document.getElementById('schoolidform');
@@ -187,18 +171,14 @@
                 if (studentType2.checked) {
                     hiddenForm.removeAttribute('hidden');
                     studentTypeForm.setAttribute('hidden', true);
-
                 } else {
                     hiddenForm.setAttribute('hidden', true);
                     studentTypeForm.removeAttribute('hidden');
                 }
             }
 
-
             studentTypeForm.addEventListener('change', toggleForms);
             toggleForms();
-
-
         });
     </script>
 </body>
