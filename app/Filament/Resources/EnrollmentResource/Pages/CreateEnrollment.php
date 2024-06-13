@@ -22,6 +22,8 @@ class CreateEnrollment extends CreateRecord
         $record = Student::find($data['student_id']);
         // dd($record);
         $record->status = Status::ENROLLED;
+        // $record->school_id = Status::SETID->value;
+        // dd($record);
         $record->save();
         return $data;
     }
