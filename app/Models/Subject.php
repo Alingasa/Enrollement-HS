@@ -19,4 +19,8 @@ class Subject extends Model
     public function section(){
         return $this->belongsTo(Section::class);
     }
+
+    public function teachers(){
+        return $this->belongsToMany(related: Teacher::class , table: 'subject_teacher');
+    }
 }

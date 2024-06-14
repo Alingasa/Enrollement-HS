@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Filament\Resources\SubjectResource\Pages;
+namespace App\Filament\Resources\TeacherResource\Pages;
 
-use App\Filament\Resources\SubjectResource;
+use App\Filament\Resources\TeacherResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateSubject extends CreateRecord
+class CreateTeacher extends CreateRecord
 {
-    protected static string $resource = SubjectResource::class;
+    protected static string $resource = TeacherResource::class;
 
     // protected function mutateFormDataBeforeCreate(array $data): array
     // {
     //     dd($data);
     //     return $data;
     // }
+
 }

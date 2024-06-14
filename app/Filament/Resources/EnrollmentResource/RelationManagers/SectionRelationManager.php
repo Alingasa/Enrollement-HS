@@ -42,6 +42,10 @@ class SectionRelationManager extends RelationManager
                 ->bulleted()
                 ->listWithLineBreaks()
                 ->label('Subject Type'),
+                Tables\Columns\TextColumn::make('teachers.full_name')
+                ->bulleted()
+                ->listWithLineBreaks()
+                ->label('Teacher'),
             ])
             ->filters([
                 //
