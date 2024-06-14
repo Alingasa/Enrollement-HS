@@ -21,7 +21,9 @@ class Section extends Model
         return $this->hasMany(Subject::class);
     }
 
-    public function subjectloads(){
-        return $this->hasMany(SubjectLoad::class);
+
+    public function setNameAttribute($value)
+    {
+        return $this->attributes['name'] = ucwords($value);
     }
 }

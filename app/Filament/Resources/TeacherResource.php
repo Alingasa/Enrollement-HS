@@ -48,6 +48,7 @@ class TeacherResource extends Resource
                 Forms\Components\TextInput::make('last_name')
                     ->required(),
                 Forms\Components\TextInput::make('email')
+                    ->unique(table: 'teachers', column: 'email', ignoreRecord: true)
                     ->email(),
                 Forms\Components\DatePicker::make('birthdate')
                     ->required(),
