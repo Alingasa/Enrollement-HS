@@ -19,4 +19,8 @@ class Strand extends Model
     public function subjects(){
         return $this->hasMany(Subject::class);
     }
+
+    public function setNameAttribute($value){
+        return $this->attributes['name'] = ucwords($value);
+    }
 }

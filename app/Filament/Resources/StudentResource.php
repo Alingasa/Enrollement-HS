@@ -13,6 +13,7 @@ use App\StudentTypeEnum;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Contracts\View\View;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -208,6 +209,19 @@ class StudentResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+
+                // Tables\Actions\Action::make('Qr')
+                // ->icon('heroicon-o-qr-code')
+                // ->url(fn (Student $record) => static::getUrl('qr-code', [$record])),
+
+                Tables\Actions\Action::make('Qr')
+                ->icon('heroicon-o-qr-code')
+    ->modalContent(fn (Student $record): View => view(
+        'filament.resources.student-resource.pages.view-qr-code',
+        ['record' => $record],
+    ))
+    ->modalSubmitAction(false)
+    // ->cancelParentActions()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -231,6 +245,7 @@ class StudentResource extends Resource
             'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudent::route('/create'),
             'view' => Pages\ViewStudent::route('/{record}'),
+            'qr-code' => Pages\ViewQrCode::route('/{record}/qr-code'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
         ];
     }
